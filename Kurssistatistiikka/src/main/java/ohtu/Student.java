@@ -1,6 +1,7 @@
 package ohtu;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Student {
     
@@ -15,6 +16,7 @@ public class Student {
     
     public void AddSubmission(Submission sub) {
         submissions.add(sub);
+        Collections.sort(submissions);
     }
     
     private int getTotalWeeks (){
@@ -53,6 +55,38 @@ public class Student {
         s += "" + '\n';
         s += "Total exercises done: "+ getTotalExercises() + "Total hours: " + getTotalHours();
         return s;
+    }
+    
+    public void PrintStats(CourseDirectory dir) {
+        System.out.println("Studentnumber: " + studentNumber);
+        
+        String currentCourse = "";
+        int exercisesDoneForCourse = 0;
+        int hoursUsedForCourse = 0;
+        for (Submission sub:submissions) {
+            if(currentCourse.equals(sub.getCourse())) {
+                System.out.println(sub);
+                exercisesDoneForCourse += sub.getNumberOfExercises();
+                hoursUsedForCourse += sub.getHours();
+            } else {
+                String fullCourseName = dir.FindFullCourseName(sub.getCourse());
+                
+                System.out.println("exercises done: " +exercisesDoneForCourse + "/"+ dir.GetTotalExercisesInCourse(sub.getCourse()) + " hours used: " + hoursUsedForCourse);
+                
+                exercisesDoneForCourse = 0;
+                hoursUsedForCourse = 0;
+                
+                System.out.println("");
+                System.out.println(fullCourseName);
+                System.out.println("");
+                System.out.println(sub);
+                currentCourse = sub.getCourse();
+                exercisesDoneForCourse += sub.getNumberOfExercises();
+                hoursUsedForCourse += sub.getHours();
+            }
+        }
+        System.out.println("exercises done: " +exercisesDoneForCourse + "/"+ dir.GetTotalExercisesInCourse(currentCourse) + " hours used: " + hoursUsedForCourse);
+
     }
     
     
